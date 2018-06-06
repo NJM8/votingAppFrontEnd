@@ -12,8 +12,12 @@ Vue.use(VeeValidate, {
   events: 'blur'
 })
 
-axios.defaults.baseURL = 'http://localhost:8000'
-// axios.defaults.baseURL = 'https://natethedev-votingappbackend.herokuapp.com/'
+console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'development') {
+  axios.defaults.baseURL = 'http://localhost:8000'
+} else if (process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = 'https://natethedev-votingappbackend.herokuapp.com/'
+}
 
 /* eslint-disable no-new */
 new Vue({
