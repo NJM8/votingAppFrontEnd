@@ -36,14 +36,14 @@ export default {
     query: {
       type: String,
       default: function () {
-        return ''
+        return 'Select a user'
       }
     }
   },
   data () {
     return {
       route: Router.currentRoute.path,
-      searched: this.query || 'Select a user'
+      searched: this.query
     }
   },
   computed: {

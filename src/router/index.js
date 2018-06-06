@@ -28,7 +28,7 @@ const routes = [
     } },
   { path: '/polls',
     component: Polls,
-    props: (route) => ({ query: route.query.q })},
+    props: (route) => ({ query: route.query.query })},
   { path: '/userPage', component: UserPage },
   { path: '/*', redirect: { name: 'home' } }
 ]
