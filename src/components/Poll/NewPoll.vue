@@ -59,16 +59,14 @@
           :style="({backgroundColor: optionInputs.color ? optionInputs.color.colorRGBA : ''})"
           class="form-control m-2"
           @change="updateColorTaken(optionInputs.color)">
-          <optgroup>
-            <option
-              v-for="color in colors"
-              :disabled="color.taken"
-              :style="({backgroundColor: color.colorRGBA})"
-              :key="color.colorName"
-              :value="color"
-              class=""
-            >{{ color.colorName }}</option>
-          </optgroup>
+          <option
+            v-for="color in colors"
+            :disabled="color.taken"
+            :style="({backgroundColor: color.colorRGBA})"
+            :key="color.colorName"
+            :value="color"
+            class=""
+          >{{ color.colorName }}</option>
         </select>
         <button
           class="btn btn-warning"
