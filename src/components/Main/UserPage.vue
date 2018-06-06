@@ -6,6 +6,16 @@
       <button
         class="btn btn-info m-2"
         @click="makeNewPoll = !makeNewPoll">Make new poll</button>
+      <button
+        class="btn btn-info m-2"
+        @click="generateShareLink">Share your polls</button>
+      <p
+        v-if="showShareLink"
+        class="mt-2">Use the link below to share with your friends:</p>
+      <a
+        v-if="showShareLink"
+        :href="shareLink"
+        class="mb-4">{{ shareLink }}</a>
     </div>
     <transition name="flip">
       <div
@@ -34,7 +44,9 @@ export default {
   },
   data () {
     return {
-      makeNewPoll: false
+      makeNewPoll: false,
+      showShareLink: false,
+      shareLink: ''
     }
   },
   computed: {
@@ -49,6 +61,12 @@ export default {
         }
         return count
       }, 0)
+    }
+  },
+  methods: {
+    generateShareLink () {
+      this.shareLink = `https://natethedev-votingappfrontend.herokuapp.com/polls?query=${this.getUserName}`
+      this.showShareLink = !this.showShareLink
     }
   }
 }
