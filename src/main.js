@@ -12,8 +12,8 @@ Vue.use(VeeValidate, {
   events: 'blur'
 })
 
-// axios.defaults.baseURL = 'http://localhost:8000'
-axios.defaults.baseURL = 'https://natethedev-votingappbackend.herokuapp.com/'
+axios.defaults.baseURL = 'http://localhost:8000'
+// axios.defaults.baseURL = 'https://natethedev-votingappbackend.herokuapp.com/'
 
 /* eslint-disable no-new */
 new Vue({

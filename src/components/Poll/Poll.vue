@@ -1,23 +1,23 @@
 <template>
   <div
-    v-if="compareCreator"
+    v-if="showPoll"
     class="col-12 border rounded text-center mt-3 mb-3 bg-white">
     <transition
       name="flip"
       mode="out-in">
       <div
-        v-if="!seePoll"
+        v-if="!displayPoll"
         :key="1">
         <div class="m-2 mt-2">
           <h2 class="m-2">{{ polldata.title }} Poll</h2>
           <a
-            v-if="!seePoll"
+            v-if="!displayPoll"
             class="cursor"
-            @click="toggleSeePoll">See Poll</a>
+            @click="toggleDisplayPoll">See Poll</a>
         </div>
       </div>
       <div
-        v-if="seePoll"
+        v-if="displayPoll"
         :key="2"
         class="d-flex justify-content-around flex-wrap m-2">
         <div class="m-2 mt-2">
@@ -26,13 +26,14 @@
           <br>
           <a
             class="cursor"
-            @click.prevent="toggleSeePoll">Hide Poll</a>
+            @click.prevent="toggleDisplayPoll">Hide Poll</a>
           <br>
           <br>
           <a
-            v-show="creator !== ''"
+            v-show="route === '/userPage'"
             class="cursor"
             @click.prevent="deletePoll(polldata)">Delete Poll</a>
+          <p>Created by {{ polldata.creator }}</p>
         </div>
         <div class="m-2 mt-3">
           <h4>Vote:</h4>
@@ -56,6 +57,7 @@
 
 <script>
 import Chart from 'chart.js'
+import Router from '../../router'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -72,7 +74,7 @@ export default {
         return 0
       }
     },
-    creator: {
+    searched: {
       type: String,
       default: function () {
         return ''
@@ -80,7 +82,8 @@ export default {
     }},
   data () {
     return {
-      seePoll: false,
+      route: Router.currentRoute.path,
+      displayPoll: false,
       myChart: null,
       pollChartData: {
         type: 'polarArea',
@@ -111,14 +114,22 @@ export default {
       'getUserIp',
       'getUserName'
     ]),
-    compareCreator () {
-      if (!this.creator) {
-        return true
-      } else {
-        if (this.creator === this.polldata.creator) {
+    showPoll () {
+      if (this.route === '/userPage') {
+        if (this.polldata.creator === this.getUserName) {
           return true
         } else {
           return false
+        }
+      } else if (this.route === '/polls') {
+        if (this.searched.length > 0) {
+          if (this.searched === this.polldata.creator) {
+            return true
+          } else {
+            return false
+          }
+        } else {
+          return true
         }
       }
     }
@@ -151,9 +162,9 @@ export default {
       this.addNewVote({ id: this.polldata.id, 'selection': selection, voter: userVoteRecord })
       this.createChart(`poll-chart${this.index}`, this.pollChartData)
     },
-    toggleSeePoll () {
-      this.seePoll = !this.seePoll
-      if (this.seePoll) {
+    toggleDisplayPoll () {
+      this.displayPoll = !this.displayPoll
+      if (this.displayPoll) {
         let chartTimer = setInterval(() => {
           if (document.getElementById(`poll-chart${this.index}`)) {
             this.createChart(`poll-chart${this.index}`, this.pollChartData)

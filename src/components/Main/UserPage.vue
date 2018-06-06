@@ -14,11 +14,11 @@
         <app-newpoll @form-submitted="makeNewPoll = false"/>
       </div>
     </transition>
-    <div class="col-4 offset-4 border rounded mt-4 text-center bg-white">
+    <div class="col-sm-8 offset-sm-2 col-md-4 offset-md-4 border rounded mt-4 text-center bg-white">
       <h1 v-if="checkMyPolls > 0">Here are your polls:</h1>
       <h1 v-else>You have not made any polls yet.</h1>
     </div>
-    <app-polls :creator="getUserName"/>
+    <app-polls/>
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
     ]),
     checkMyPolls () {
       return this.getPolls.reduce((count, poll) => {
-        if (poll.creator === this.getUserName) {
+        if (poll.pollData.creator === this.getUserName) {
           count += 1
         }
         return count
