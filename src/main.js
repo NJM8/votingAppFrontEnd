@@ -12,7 +12,6 @@ Vue.use(VeeValidate, {
   events: 'blur'
 })
 
-console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'http://localhost:8000'
 } else if (process.env.NODE_ENV === 'production') {
