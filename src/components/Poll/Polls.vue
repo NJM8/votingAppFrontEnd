@@ -4,11 +4,15 @@
       v-if="route === '/polls'"
       class="col-4 offset-4 border rounded bg-white mt-3 p-2">
       <label>Search for a users polls:</label>
-      <input
+      <select
         v-model="searched"
-        type="text"
-        class="form-control"
-        placeholder="Username">
+        class="form-control">
+        <option
+          v-for="name in names"
+          :key="name"
+          :selected="'Select a user'"
+        >{{ name }}</option>
+      </select>
     </div>
     <app-poll
       v-for="(poll, index) in getPolls"
@@ -31,13 +35,21 @@ export default {
   data () {
     return {
       route: Router.currentRoute.path,
-      searched: ''
+      searched: 'Select a user'
     }
   },
   computed: {
     ...mapGetters([
       'getPolls'
-    ])
+    ]),
+    names () {
+      return this.getPolls.reduce((res, poll) => {
+        if (!res.includes(poll.pollData.creator)) {
+          res.push(poll.pollData.creator)
+        }
+        return res
+      }, ['Select a user'])
+    }
   }
 }
 </script>

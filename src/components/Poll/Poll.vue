@@ -122,14 +122,14 @@ export default {
           return false
         }
       } else if (this.route === '/polls') {
-        if (this.searched.length > 0) {
+        if (this.searched === 'Select a user') {
+          return true
+        } else {
           if (this.searched === this.polldata.creator) {
             return true
           } else {
             return false
           }
-        } else {
-          return true
         }
       }
     }
