@@ -26,7 +26,9 @@ const routes = [
       store.commit('setTakenCredentials', false)
       next()
     } },
-  { path: '/polls', component: Polls },
+  { path: '/polls',
+    component: Polls,
+    props: (route) => ({ query: route.query.q })},
   { path: '/userPage', component: UserPage },
   { path: '/*', redirect: { name: 'home' } }
 ]

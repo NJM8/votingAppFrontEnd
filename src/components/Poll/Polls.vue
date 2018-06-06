@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="route === '/polls'"
-      class="col-4 offset-4 border rounded bg-white mt-3 p-2">
+      class="col-sm-6 offset-sm-3 col-md-4 offset-md-4 border rounded bg-white mt-3 p-2">
       <label>Search for a users polls:</label>
       <select
         v-model="searched"
@@ -10,7 +10,7 @@
         <option
           v-for="name in names"
           :key="name"
-          :selected="'Select a user'"
+          :selected="searched"
         >{{ name }}</option>
       </select>
     </div>
@@ -32,10 +32,18 @@ export default {
   components: {
     'app-poll': Poll
   },
+  props: {
+    query: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    }
+  },
   data () {
     return {
       route: Router.currentRoute.path,
-      searched: 'Select a user'
+      searched: this.query || 'Select a user'
     }
   },
   computed: {
@@ -49,6 +57,9 @@ export default {
         }
         return res
       }, ['Select a user'])
+    },
+    searchSelection () {
+      return this.query || 'Select a user'
     }
   }
 }
