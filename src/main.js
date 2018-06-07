@@ -6,11 +6,13 @@ import router from './router'
 import store from './store/store'
 import axios from 'axios'
 import VeeValidate from 'vee-validate'
+import VueClipboard from 'vue-clipboard2'
 
 Vue.config.productionTip = false
 Vue.use(VeeValidate, {
   events: 'blur'
 })
+Vue.use(VueClipboard)
 
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'http://localhost:8000'

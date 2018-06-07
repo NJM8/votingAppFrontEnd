@@ -12,10 +12,24 @@
       <p
         v-if="showShareLink"
         class="mt-2">Use the link below to share with your friends:</p>
-      <a
+      <div
         v-if="showShareLink"
-        :href="shareLink"
-        class="mb-4">{{ shareLink }}</a>
+        class="m-2">
+        <a
+          :href="shareLink"
+          class="list-group-item"
+          target="_blank"
+          rel="noopener">{{ shareLink }}</a>
+        <br>
+        <button
+          v-clipboard:copy="shareLink"
+          v-clipboard:success="handleCopySuccess"
+          v-clipboard:error="handleCopyFailure"
+          v-if="showShareLink"
+          class="btn btn-primary">
+          Copy Link
+        </button>
+      </div>
     </div>
     <transition name="flip">
       <div
@@ -35,7 +49,7 @@
 <script>
 import Polls from '../Poll/Polls'
 import NewPoll from '../Poll/NewPoll'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -64,9 +78,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setUserMessage'
+    ]),
     generateShareLink () {
       this.shareLink = `https://natethedev-votingappfrontend.herokuapp.com/polls?query=${this.getUserName}`
       this.showShareLink = !this.showShareLink
+    },
+    handleCopySuccess () {
+      this.setUserMessage('Copied!')
+    },
+    handleCopyFailure () {
+      this.setUserMessage('Copy failed, press CTRL-C.')
     }
   }
 }
