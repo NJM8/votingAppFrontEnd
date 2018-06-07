@@ -143,7 +143,8 @@ export default {
   },
   watch: {
     polldata: function () {
-      this.createChart(`poll-chart${this.index}`, this.pollChartData)
+      this.myChart.update()
+      // this.createChart(`poll-chart${this.index}`, this.pollChartData)
     }
   },
   methods: {
