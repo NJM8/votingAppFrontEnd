@@ -7,13 +7,11 @@
       mode="out-in">
       <div
         v-if="!displayPoll"
-        :key="1">
+        :key="1"
+        class="cursor"
+        @click="toggleDisplayPoll">
         <div class="m-2 mt-2">
           <h2 class="m-2">{{ polldata.title }} Poll</h2>
-          <a
-            v-if="!displayPoll"
-            class="cursor"
-            @click="toggleDisplayPoll">See Poll</a>
         </div>
       </div>
       <div
@@ -23,10 +21,6 @@
         <div class="m-2 mt-2">
           <h2 class="m-2">{{ polldata.title }} Poll</h2>
           <p class="mt-5">{{ polldata.description }}</p>
-          <br>
-          <a
-            class="cursor"
-            @click.prevent="toggleDisplayPoll">Hide Poll</a>
           <br>
           <br>
           <a
@@ -47,9 +41,14 @@
             >{{ option }}</button>
           </div>
         </div>
-        <div class="m-3 chart-container">
+        <div class="chart-container mt-3 mb-3">
           <canvas :id="`poll-chart${index}`"/>
         </div>
+        <font-awesome-icon
+          :icon="icon"
+          size="2x"
+          class="cursor m-2 align-self-start"
+          @click.prevent="toggleDisplayPoll" />
       </div>
     </transition>
   </div>
@@ -59,8 +58,13 @@
 import Chart from 'chart.js'
 import Router from '../../router'
 import { mapActions, mapGetters } from 'vuex'
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
 
 export default {
+  components: {
+    FontAwesomeIcon
+  },
   props: {
     polldata: {
       type: Object,
@@ -132,6 +136,9 @@ export default {
           }
         }
       }
+    },
+    icon () {
+      return faTimes
     }
   },
   watch: {
