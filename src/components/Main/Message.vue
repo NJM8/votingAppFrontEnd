@@ -36,7 +36,7 @@ export default {
       clearTimeout(this.modalTimer)
       this.modalTimer = setTimeout(() => {
         this.setUserMessage(null)
-      }, 1500)
+      }, 1400)
     }
   },
   methods: {
@@ -59,9 +59,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, .3);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity .5s ease;
 }
 
 .modal-wrapper {
@@ -76,7 +76,7 @@ export default {
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  transition: all .5s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 

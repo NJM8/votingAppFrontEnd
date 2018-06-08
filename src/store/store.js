@@ -261,7 +261,6 @@ export default new Vuex.Store({
       commit('setNewVote', payload)
       axios.patch('users/addNewVote', vote)
         .then(res => {
-          dispatch('setUserMessage', res.data)
         })
         .catch(error => {
           dispatch('setUserMessage', error.response.data)
