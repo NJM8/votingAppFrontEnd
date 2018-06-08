@@ -69,7 +69,7 @@ export default new Vuex.Store({
       })
     },
     setIp (state, payload) {
-      state.userIp = payload.replace(/\./g, '')
+      state.userIp = payload
     },
     setMessage (state, payload) {
       state.userMessage = payload
@@ -272,7 +272,17 @@ export default new Vuex.Store({
     getIp ({commit}) {
       ipAxios.get('')
         .then(data => {
-          commit('setIp', data.data.ip)
+          data.data.ip = null
+          if (data.data.ip === null) {
+            let localIdNumber = JSON.parse(localStorage.getItem('votingAppLocalId'))
+            if (!localIdNumber) {
+              localIdNumber = Math.random()
+              localStorage.setItem('votingAppLocalId', JSON.stringify(localIdNumber))
+            }
+            commit('setIp', localIdNumber)
+          } else {
+            commit('setIp', data.data.ip.replace(/\./g, ''))
+          }
         })
         .catch(error => console.log(error))
     },
