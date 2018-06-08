@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showPoll"
+    v-show="showPoll"
     class="col-12 border rounded text-center mt-3 mb-3 bg-white">
     <transition
       name="flip"
@@ -141,12 +141,6 @@ export default {
       return faTimes
     }
   },
-  watch: {
-    polldata: function () {
-      this.myChart.update()
-      // this.createChart(`poll-chart${this.index}`, this.pollChartData)
-    }
-  },
   methods: {
     ...mapActions([
       'setUserMessage',
@@ -168,7 +162,7 @@ export default {
         return
       }
       this.addNewVote({ id: this.polldata.id, 'selection': selection, voter: userVoteRecord })
-      this.createChart(`poll-chart${this.index}`, this.pollChartData)
+      this.myChart.update()
     },
     toggleDisplayPoll () {
       this.displayPoll = !this.displayPoll
