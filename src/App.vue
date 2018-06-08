@@ -39,13 +39,13 @@ export default {
   created () {
     this.tryAutoLogin()
     this.fetchPolls()
-    this.getIp()
+    this.getOrCreateLocalId()
   },
   methods: {
     ...mapActions([
       'tryAutoLogin',
       'fetchPolls',
-      'getIp'
+      'getOrCreateLocalId'
     ])
   }
 }

@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getUserIp',
+      'getLocalId',
       'getUserName'
     ]),
     showPoll () {
@@ -162,7 +162,7 @@ export default {
       })
     },
     addNewVoteLocal (selection) {
-      const userVoteRecord = this.getUserIp + (this.getUserName || '')
+      const userVoteRecord = this.getLocalId + (this.getUserName || '')
       if (this.polldata.voters.includes(userVoteRecord)) {
         this.setUserMessage('Sorry you cannot vote twice')
         return

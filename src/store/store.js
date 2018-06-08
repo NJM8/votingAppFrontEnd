@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import router from '../router'
-import ipAxios from '../helpers/ipHelper'
 
 Vue.use(Vuex)
 
@@ -10,7 +9,7 @@ export default new Vuex.Store({
   state: {
     idToken: null,
     username: null,
-    userIp: null,
+    localId: null,
     invalidCredentials: false,
     takenCredentials: false,
     returningUser: false,
@@ -68,8 +67,8 @@ export default new Vuex.Store({
         }
       })
     },
-    setIp (state, payload) {
-      state.userIp = payload
+    setLocalId (state, payload) {
+      state.localId = payload
     },
     setMessage (state, payload) {
       state.userMessage = payload
@@ -214,7 +213,7 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    deletePoll ({commit, dispatch}, payload) {
+    deletePoll ({dispatch}, payload) {
       axios.delete('users/deletePoll', payload.id)
         .then(res => {
           dispatch('setUserMessage', res.data)
@@ -225,7 +224,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    submitNewPoll ({commit, dispatch, state}, payload) {
+    submitNewPoll ({dispatch, state}, payload) {
       const newPoll = {
         title: payload.title,
         description: payload.description,
@@ -253,7 +252,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    addNewVote ({commit, dispatch, state}, payload) {
+    addNewVote ({commit, dispatch}, payload) {
       const vote = {
         id: payload.id,
         selection: payload.selection,
@@ -269,22 +268,13 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    getIp ({commit}) {
-      ipAxios.get('')
-        .then(data => {
-          data.data.ip = null
-          if (data.data.ip === null) {
-            let localIdNumber = JSON.parse(localStorage.getItem('votingAppLocalId'))
-            if (!localIdNumber) {
-              localIdNumber = Math.random()
-              localStorage.setItem('votingAppLocalId', JSON.stringify(localIdNumber))
-            }
-            commit('setIp', localIdNumber)
-          } else {
-            commit('setIp', data.data.ip.replace(/\./g, ''))
-          }
-        })
-        .catch(error => console.log(error))
+    getOrCreateLocalId ({commit}) {
+      let localIdNumber = JSON.parse(localStorage.getItem('votingAppLocalId'))
+      if (!localIdNumber) {
+        localIdNumber = Math.random()
+        localStorage.setItem('votingAppLocalId', JSON.stringify(localIdNumber))
+      }
+      commit('setLocalId', localIdNumber)
     },
     setUserMessage ({commit}, payload) {
       commit('setMessage', payload)
@@ -309,8 +299,8 @@ export default new Vuex.Store({
     getTakenCredentials (state) {
       return state.takenCredentials
     },
-    getUserIp (state) {
-      return state.userIp
+    getLocalId (state) {
+      return state.localId
     },
     getMessage (state) {
       return state.userMessage
