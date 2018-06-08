@@ -5,7 +5,7 @@
     <app-header/>
     <app-message/>
     <transition
-      name="slide"
+      :name="transitionName"
       mode="out-in">
       <router-view/>
     </transition>
@@ -23,6 +23,19 @@ export default {
     'app-header': Header,
     'app-message': Message
   },
+  data () {
+    return {
+      transitionName: ''
+
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      const toName = Number(to.meta)
+      const fromName = Number(from.meta)
+      this.transitionName = toName > fromName ? 'slide-right' : 'slide-left'
+    }
+  },
   created () {
     this.tryAutoLogin()
     this.fetchPolls()
@@ -39,16 +52,28 @@ export default {
 </script>
 
 <style>
-.slide-enter {
+.slide-right-enter {
   transform: translateX(400px);
   opacity: 0;
 }
-.slide-enter-active {
+.slide-right-enter-active {
   transition: all 300ms ease;
 }
-.slide-leave-active {
+.slide-right-leave-active {
   transition: all 300ms ease;
   transform: translateX(-400px);
+  opacity: 0;
+}
+.slide-left-enter {
+  transform: translateX(-400px);
+  opacity: 0;
+}
+.slide-left-enter-active {
+  transition: all 300ms ease;
+}
+.slide-left-leave-active {
+  transition: all 300ms ease;
+  transform: translateX(400px);
   opacity: 0;
 }
 </style>

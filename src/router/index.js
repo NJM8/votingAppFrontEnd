@@ -11,9 +11,12 @@ import Polls from '../components/Poll/Polls.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/home', component: Home, name: 'home' },
+  { path: '/home',
+    component: Home,
+    meta: '0'},
   { path: '/signup',
     component: SignUp,
+    meta: '1',
     beforeEnter: (to, from, next) => {
       store.commit('setInvalidCredentials', false)
       store.commit('setTakenCredentials', false)
@@ -21,6 +24,7 @@ const routes = [
     } },
   { path: '/login',
     component: LogIn,
+    meta: '2',
     beforeEnter: (to, from, next) => {
       store.commit('setInvalidCredentials', false)
       store.commit('setTakenCredentials', false)
@@ -28,9 +32,12 @@ const routes = [
     } },
   { path: '/polls',
     component: Polls,
+    meta: '3',
     props: (route) => ({ query: route.query.query })},
-  { path: '/userPage', component: UserPage },
-  { path: '/*', redirect: { name: 'home' } }
+  { path: '/userPage',
+    component: UserPage,
+    meta: '4' },
+  { path: '/*', redirect: '/home' }
 ]
 
 export default new VueRouter({mode: 'history', routes})
