@@ -17,7 +17,7 @@
       <div
         v-if="displayPoll"
         :key="2"
-        class="d-flex justify-content-around flex-wrap m-2">
+        class="d-flex justify-content-around m-2">
         <div class="m-2 mt-2">
           <h2 class="m-2">{{ polldata.title }} Poll</h2>
           <p class="mt-5">{{ polldata.description }}</p>
