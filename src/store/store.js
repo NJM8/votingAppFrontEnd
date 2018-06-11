@@ -72,6 +72,21 @@ export default new Vuex.Store({
     },
     setMessage (state, payload) {
       state.userMessage = payload
+    },
+    setNewOptions (state, payload) {
+      const newOptionsValues = []
+      const newOptionsColors = []
+      for (const option of payload.options) {
+        newOptionsValues.push(option.value)
+        newOptionsColors.push(option.color.colorRGBA)
+      }
+      state.polls.forEach(poll => {
+        if (poll.pollData.id === payload.id) {
+          poll.pollData.options.push(...newOptionsValues)
+          poll.pollData.colors.push(...newOptionsColors)
+          poll.pollData.votes.push(0)
+        }
+      })
     }
   },
   actions: {
@@ -252,7 +267,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    submitAddOptionToPoll ({dispatch}, payload) {
+    submitAddOptionToPoll ({commit, dispatch}, payload) {
       const newOptions = payload.options.reduce((res, option) => {
         const newOption = {
           optionName: option.value,
@@ -264,10 +279,9 @@ export default new Vuex.Store({
         res.push(newOption)
         return res
       }, [])
+      commit('setNewOptions', payload)
       axios.patch('users/addOptionToPoll', {id: payload.id, newOptions})
         .then(res => {
-          dispatch('setUserMessage', res.data)
-          dispatch('fetchPolls')
         })
         .catch(error => {
           dispatch('setUserMessage', error.response.data)

@@ -191,10 +191,14 @@ export default {
   },
   computed: {
     userAddingOptionsFromPoll () {
-      if (!this.calledfromnewpoll && this.optionInputs.length > 0) {
+      if (this.calledfromnewpoll) {
         return true
       } else {
-        return false
+        if (this.optionInputs.length > 0) {
+          return true
+        } else {
+          return false
+        }
       }
     }
   },
