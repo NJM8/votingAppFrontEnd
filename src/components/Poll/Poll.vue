@@ -17,38 +17,47 @@
       <div
         v-if="displayPoll"
         :key="2"
-        class="d-flex justify-content-around m-2">
-        <div class="m-2 mt-2">
-          <h2 class="m-2">{{ polldata.title }} Poll</h2>
-          <p class="mt-5">{{ polldata.description }}</p>
-          <br>
-          <br>
-          <a
-            v-show="route === '/userPage'"
-            class="cursor"
-            @click.prevent="deletePoll(polldata)">Delete Poll</a>
-          <p>Created by {{ polldata.creator }}</p>
-        </div>
-        <div class="m-2 mt-3">
-          <h4>Vote:</h4>
-          <div class="d-flex flex-column flex-wrap buttonContainer">
-            <button
-              v-for="(option, index) in polldata.options"
-              :key="index"
-              :style="({backgroundColor: polldata.colors[index]})"
-              class="btn m-1"
-              @click="addNewVoteLocal($event.target.textContent)"
-            >{{ option }}</button>
+        class="d-flex flex-column justify-content-around m-2">
+        <div class="d-flex justify-content-around">
+          <div class="m-2 mt-2 titleContainer">
+            <h2 class="m-2">{{ polldata.title }} Poll</h2>
+            <p class="mt-5">{{ polldata.description }}</p>
+            <br>
+            <br>
+            <a
+              v-show="route === '/userPage'"
+              class="cursor"
+              @click.prevent="deletePoll(polldata)">Delete Poll</a>
+            <p>Created by {{ polldata.creator }}</p>
           </div>
+          <div class="m-2 mt-3">
+            <h4>Vote:</h4>
+            <div class="d-flex flex-column flex-wrap buttonContainer">
+              <button
+                v-for="(option, index) in polldata.options"
+                :key="index"
+                :style="({backgroundColor: polldata.colors[index]})"
+                class="btn m-1"
+                @click="addNewVoteLocal($event.target.textContent)"
+              >{{ option }}</button>
+            </div>
+          </div>
+          <div class="chart-container mt-3 mb-3 p-2">
+            <canvas :id="`poll-chart${index}`"/>
+          </div>
+          <font-awesome-icon
+            :icon="icon"
+            size="2x"
+            class="cursor m-2 align-self-start"
+            @click.prevent="toggleDisplayPoll" />
         </div>
-        <div class="chart-container mt-3 mb-3">
-          <canvas :id="`poll-chart${index}`"/>
+        <div>
+          <new-poll
+            :existingpollcolors="existingPollColors"
+            :existingpolloptions="existingPollOptions"
+            :id="pollId"
+            :calledfromnewpoll="false"/>
         </div>
-        <font-awesome-icon
-          :icon="icon"
-          size="2x"
-          class="cursor m-2 align-self-start"
-          @click.prevent="toggleDisplayPoll" />
       </div>
     </transition>
   </div>
@@ -58,12 +67,14 @@
 import Chart from 'chart.js'
 import Router from '../../router'
 import { mapActions, mapGetters } from 'vuex'
+import NewPoll from './NewPoll'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
 
 export default {
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    NewPoll
   },
   props: {
     polldata: {
@@ -139,6 +150,15 @@ export default {
     },
     icon () {
       return faTimes
+    },
+    existingPollColors () {
+      return this.polldata.colors
+    },
+    existingPollOptions () {
+      return this.polldata.options
+    },
+    pollId () {
+      return this.polldata.id
     }
   },
   methods: {
@@ -189,6 +209,9 @@ export default {
   }
   .buttonContainer {
     max-height: 250px;
+  }
+  .titleContainer {
+    max-width: 325px;
   }
   .chart-container {
     width: 550px;

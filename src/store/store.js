@@ -252,6 +252,28 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    submitAddOptionToPoll ({dispatch}, payload) {
+      const newOptions = payload.options.reduce((res, option) => {
+        const newOption = {
+          optionName: option.value,
+          details: {
+            optionColor: option.color.colorRGBA,
+            optionNumVotes: 0
+          }
+        }
+        res.push(newOption)
+        return res
+      }, [])
+      axios.patch('users/addOptionToPoll', {id: payload.id, newOptions})
+        .then(res => {
+          dispatch('setUserMessage', res.data)
+          dispatch('fetchPolls')
+        })
+        .catch(error => {
+          dispatch('setUserMessage', error.response.data)
+          console.log(error)
+        })
+    },
     addNewVote ({commit, dispatch}, payload) {
       const vote = {
         id: payload.id,

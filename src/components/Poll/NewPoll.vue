@@ -2,7 +2,9 @@
   <form
     class="m-2"
     @submit.prevent="onSubmit">
-    <div class="formgroup">
+    <div
+      v-if="calledfromnewpoll"
+      class="formgroup">
       <label for="title">Title:</label>
       <input
         v-validate="'required'"
@@ -15,7 +17,9 @@
         v-if="errors.has('title')"
         class="errorText">{{ errors.first('title') }}</span>
     </div>
-    <div class="formgroup">
+    <div
+      v-if="calledfromnewpoll"
+      class="formgroup">
       <label for="description">Description:</label>
       <textarea
         v-validate="'required'"
@@ -31,7 +35,12 @@
         class="errorText">{{ errors.first('description') }}</span>
     </div>
     <div class="formgroup">
-      <Label for="options">Voting Options:</Label>
+      <Label
+        v-if="calledfromnewpoll"
+        for="options">Voting Options:</Label>
+      <Label
+        v-else
+        for="options">Add some voting options</Label>
       <button
         class="btn btn-info m-2"
         type="button"
@@ -83,7 +92,9 @@
     <span
       v-if="checkOptionsInput"
       class="errorText">{{ optionsError }}</span>
-    <div class="form-group d-flex mt-2">
+    <div
+      v-if="userAddingOptionsFromPoll"
+      class="form-group d-flex mt-2">
       <div class="ml-auto d-flex flex-column">
         <button
           type="submit"
@@ -100,6 +111,32 @@
 import { mapActions } from 'vuex'
 
 export default {
+  props: {
+    calledfromnewpoll: {
+      type: Boolean,
+      default: function () {
+        return true
+      }
+    },
+    existingpollcolors: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    existingpolloptions: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    id: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    }
+  },
   data () {
     return {
       title: '',
@@ -152,10 +189,31 @@ export default {
       submitTried: false
     }
   },
+  computed: {
+    userAddingOptionsFromPoll () {
+      if (!this.calledfromnewpoll && this.optionInputs.length > 0) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  created () {
+    if (this.existingpollcolors.length > 0) {
+      this.existingpollcolors.forEach(color => {
+        this.colors.forEach(c => {
+          if (color === c.colorRGBA) {
+            c.taken = true
+          }
+        })
+      })
+    }
+  },
   methods: {
     ...mapActions([
       'submitPollEdit',
-      'submitNewPoll'
+      'submitNewPoll',
+      'submitAddOptionToPoll'
     ]),
     addOption () {
       if (this.optionInputs.length === 10) {
@@ -201,12 +259,20 @@ export default {
             return
           }
           this.fixForm = false
-          const formData = {
-            title: this.title,
-            description: this.description,
-            options: this.optionInputs
+          if (this.calledfromnewpoll) {
+            const formData = {
+              title: this.title,
+              description: this.description,
+              options: this.optionInputs
+            }
+            this.editing ? this.submitPollEdit(formData) : this.submitNewPoll(formData)
+          } else {
+            const newOptions = {
+              id: this.id,
+              options: this.optionInputs
+            }
+            this.submitAddOptionToPoll(newOptions)
           }
-          this.editing ? this.submitPollEdit(formData) : this.submitNewPoll(formData)
           this.$emit('form-submitted')
           this.resetForm()
         } else {
@@ -225,7 +291,7 @@ export default {
       this.submitTried = false
     },
     checkOptionsInput () {
-      if (this.optionInputs.length < 2 && this.submitTried) {
+      if (this.optionInputs.length < 2 && this.submitTried && this.calledfromnewpoll) {
         this.optionsError = 'Please add at least 2 options for voting'
         return false
       } else {
@@ -236,11 +302,15 @@ export default {
               dupCheck = true
             }
           })
+          if (this.existingpolloptions.includes(input.value)) {
+            dupCheck = true
+          }
         })
         if (dupCheck) {
           this.optionsError = 'Please make sure each voting option is unique'
           return false
         } else {
+          this.optionsError = ''
           return true
         }
       }
