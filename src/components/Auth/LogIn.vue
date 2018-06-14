@@ -1,5 +1,5 @@
 <template>
-  <div class="col-6 offset-3 border rounded mt-4 bg-white">
+  <div class="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3  border rounded mt-4 bg-white">
     <form
       class="p-3"
       @submit.prevent="onSubmit">

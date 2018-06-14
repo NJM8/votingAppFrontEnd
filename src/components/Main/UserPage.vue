@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="col-8 offset-2 border rounded mt-4 text-center bg-white">
+    <div class="col-xs-12 offset-xs-0 col-sm-8 offset-sm-2 border rounded mt-4 text-center bg-white">
       <h1>Welcome to your page {{ getUserName }}</h1>
       <h4>Here you can edit your polls or make some new ones.</h4>
       <button
@@ -17,7 +17,7 @@
         class="m-2">
         <a
           :href="shareLink"
-          class="list-group-item"
+          class="list-group-item wrap"
           target="_blank"
           rel="noopener">{{ shareLink }}</a>
         <br>
@@ -96,5 +96,7 @@ export default {
 </script>
 
 <style>
-
+.wrap {
+  overflow-wrap: break-word;
+}
 </style>
