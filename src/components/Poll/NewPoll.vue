@@ -224,7 +224,7 @@ export default {
       'submitAddOptionToPoll'
     ]),
     addOption () {
-      if (this.optionInputs.length === 10 || this.existingpolloptions.length === 10) {
+      if (this.optionInputs.length + this.existingpolloptions.length === 10) {
         this.showMaxOptionsMessage = true
         return
       }
