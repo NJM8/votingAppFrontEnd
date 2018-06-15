@@ -92,6 +92,9 @@
     <span
       v-if="checkOptionsInput"
       class="errorText">{{ optionsError }}</span>
+    <span
+      v-if="showMaxOptionsMessage"
+      class="errorText">Sorry no more than 10 options</span>
     <div
       v-if="userAddingOptionsFromPoll"
       class="form-group d-flex mt-2">
@@ -186,7 +189,8 @@ export default {
       ],
       fixForm: false,
       optionsError: '',
-      submitTried: false
+      submitTried: false,
+      showMaxOptionsMessage: false
     }
   },
   computed: {
@@ -220,7 +224,8 @@ export default {
       'submitAddOptionToPoll'
     ]),
     addOption () {
-      if (this.optionInputs.length === 10) {
+      if (this.optionInputs.length === 10 || this.existingpolloptions.length === 10) {
+        this.showMaxOptionsMessage = true
         return
       }
       this.submitTried = false
