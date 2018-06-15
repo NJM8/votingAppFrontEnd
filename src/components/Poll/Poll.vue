@@ -17,9 +17,14 @@
       <div
         v-if="displayPoll"
         :key="2"
-        class="d-flex flex-column justify-content-around">
-        <div class="d-flex justify-content-around m-2">
-          <div>
+        class="d-flex flex-column justify-content-around align-items-center">
+        <div class="d-flex col-10 col-md-12 col-xl-12 flex-column flex-xl-row justify-content-around align-items-center m-2">
+          <font-awesome-icon
+            :icon="icon"
+            size="2x"
+            class="cursor top-right"
+            @click.prevent="toggleDisplayPoll" />
+          <div class="">
             <h2>{{ polldata.title }} Poll</h2>
             <p>{{ polldata.description }}</p>
             <a
@@ -32,16 +37,11 @@
               v-for="(option, index) in polldata.options"
               :key="index"
               :style="({backgroundColor: polldata.colors[index]})"
-              class="btn m-1"
+              class="btn btn-sm m-1"
               @click="addNewVoteLocal($event.target.textContent)"
-            >{{ option }}</button>
+            >{{ option }}: {{ polldata.votes[index] }}</button>
           </div>
-          <div class="chart-container">
-            <font-awesome-icon
-              :icon="icon"
-              size="2x"
-              class="cursor float-right"
-              @click.prevent="toggleDisplayPoll" />
+          <div class="chart-container ">
             <canvas
               :id="`poll-chart${index}`"
               class="m-2"/>
@@ -109,7 +109,7 @@ export default {
         options: {
           responsive: true,
           legend: {
-            position: 'right'
+            display: false
           },
           animation: {
             animateRotate: true,
@@ -213,7 +213,7 @@ export default {
     cursor: pointer;
   }
   .chart-container {
-    width: 550px;
+    width: 650px;
   }
   .flip-enter {
     transform: scaleY(0.1);
@@ -227,10 +227,20 @@ export default {
     transform: scaleY(0.1);
     opacity: 0;
   }
-
-  @media screen and (max-width: 1000px) {
+  .top-right {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  @media screen and (max-width: 430px) {
     .chart-container {
-      width: 350px;
+      width: 450px;
+    }
+  }
+  @media screen and (max-width: 765px) {
+    .top-right {
+      top: 0px;
+      right: -30px;
     }
   }
 </style>
