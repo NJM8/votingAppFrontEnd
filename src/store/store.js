@@ -306,7 +306,7 @@ export default new Vuex.Store({
     getOrCreateLocalId ({commit}) {
       let localIdNumber = JSON.parse(localStorage.getItem('votingAppLocalId'))
       if (!localIdNumber) {
-        localIdNumber = Math.random()
+        localIdNumber = String(Math.random())
         localStorage.setItem('votingAppLocalId', JSON.stringify(localIdNumber))
       }
       commit('setLocalId', localIdNumber)

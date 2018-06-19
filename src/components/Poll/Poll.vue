@@ -181,13 +181,13 @@ export default {
       })
     },
     addNewVoteLocal (selection) {
-      const userVoteRecord = this.getLocalId + (this.getUserName || '')
+      const userVoteRecord = this.getUserName || this.getLocalId
       if (this.polldata.voters.includes(userVoteRecord)) {
         this.setUserMessage('Sorry you cannot vote twice')
-        return
+      } else {
+        this.addNewVote({ id: this.polldata.id, 'selection': selection.split(':')[0], voter: userVoteRecord })
+        this.myChart.update()
       }
-      this.addNewVote({ id: this.polldata.id, 'selection': selection, voter: userVoteRecord })
-      this.myChart.update()
     },
     toggleDisplayPoll () {
       this.displayPoll = !this.displayPoll
