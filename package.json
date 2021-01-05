@@ -15,7 +15,7 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "@fortawesome/vue-fontawesome": "0.0.23",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "express": "^4.17.1",
     "serve-static": "^1.14.1",
